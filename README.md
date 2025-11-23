@@ -1,1 +1,6 @@
 here is the synod of games
+
+
+here is my MVP video link
+
+https://uncg-my.sharepoint.com/:v:/g/personal/ljparra_uncg_edu/IQAiX7rr-u3sTaGiXvOCeCoaAYzLm3dbHugaHfQuv9C85mo?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=6WdFex
