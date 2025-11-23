@@ -1,4 +1,4 @@
-// backend/db.js
+//backend/db.js
 import pkg from "pg";
 const { Pool } = pkg;
 
