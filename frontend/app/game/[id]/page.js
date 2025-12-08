@@ -13,7 +13,8 @@ export default function GamePage() {
   const [content, setContent] = useState("");
 
   
-  const API_URL = "https://sog-backend-lc0y.onrender.com/reviews";
+  
+  const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/reviews`;
 
   //load reviews for this game
   const loadReviews = async () => {
