@@ -3,6 +3,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import reviews from "./routes/reviews.js";
+import games from "./routes/games.js";
+
+app.use("/games", games);
+
 
 dotenv.config();
 
