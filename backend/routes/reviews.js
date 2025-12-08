@@ -22,14 +22,14 @@ router.get("/:gameId", async (req, res) => {
 
 // POST /reviews
 router.post("/", async (req, res) => {
-  const { gameId, username, content } = req.body;
+  const { gameId, username, content, rating } = req.body;
 
   try {
     const result = await pool.query(
-      `INSERT INTO reviews (game_id, username, content)
-       VALUES ($1, $2, $3)
+      `INSERT INTO reviews (game_id, username, content, rating)
+       VALUES ($1, $2, $3, $4)
        RETURNING *`,
-      [gameId, username, content]
+      [gameId, username, content, rating]
     );
 
     res.json(result.rows[0]);

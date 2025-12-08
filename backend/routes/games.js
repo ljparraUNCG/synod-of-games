@@ -29,4 +29,25 @@ router.get("/search/:name", async (req, res) => {
 
 });
 
+
+// GET /games/details/:id → get a game by IGDB ID
+router.get("/details/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await axios({
+      url: "https://api.igdb.com/v4/games",
+      method: "POST",
+      headers: {
+        "Client-ID": process.env.IGDB_CLIENT_ID,
+        Authorization: `Bearer ${process.env.IGDB_ACCESS_TOKEN}`,
+      },
+      data: `fields name,cover.url,summary,first_release_date,rating; where id = ${id};`,
+    });
+    res.json(response.data);
+  } catch (err) {
+    console.error("IGDB API error (details):", err.response?.data || err.message);
+    res.status(500).json({ error: "Error fetching game details from IGDB" });
+  }
+});
+
 export default router;

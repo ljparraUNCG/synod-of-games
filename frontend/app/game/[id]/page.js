@@ -1,5 +1,7 @@
 "use client";
 
+
+
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
@@ -11,6 +13,8 @@ export default function GamePage() {
   const [reviews, setReviews] = useState([]);
   const [username, setUsername] = useState("");
   const [content, setContent] = useState("");
+  const [rating, setRating] = useState(0);
+
 
   
   
@@ -35,9 +39,11 @@ export default function GamePage() {
         gameId: Number(gameId),
         username,
         content,
+        rating,
       });
       setUsername("");
       setContent("");
+      setRating(0);
       loadReviews();
     } catch (err) {
       console.error(err);
@@ -73,6 +79,17 @@ export default function GamePage() {
             height: "100px",
           }}
         />
+        <input
+          type="number"
+          placeholder="Rating (0-10)"
+          value={rating}
+          onChange={(e) => setRating(Number(e.target.value))}
+          min={0}
+          max={10}
+          required
+          style={{ display: "block", marginBottom: "0.5rem", width: "300px" }}
+        />
+
         <button type="submit">Submit Review</button>
       </form>
 
@@ -89,7 +106,7 @@ export default function GamePage() {
               marginBottom: "0.5rem",
             }}
           >
-            <strong>{r.username}</strong>
+            <strong>{r.username}</strong> - <em>Rating: {r.rating}/10</em>
             <p>{r.content}</p>
           </div>
         ))
