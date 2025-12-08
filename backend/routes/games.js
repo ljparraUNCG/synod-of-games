@@ -14,17 +14,19 @@ router.get("/search/:name", async (req, res) => {
       url: "https://api.igdb.com/v4/games",
       method: "POST",
       headers: {
-        "Client-ID": CLIENT_ID,
-        Authorization: `Bearer ${TOKEN}`,
+        "Client-ID": process.env.IGDB_CLIENT_ID,
+        Authorization: `Bearer ${process.env.IGDB_ACCESS_TOKEN}`,
       },
-      data: `search "${name}"; fields name,cover.url,summary,first_release_date,rating; limit 10;`,
+      data: `search "${name}"; fields name,cover.url,summary; limit 10;`,
     });
+
 
     res.json(response.data);
   } catch (err) {
-    console.error(err);
+    console.error("IGDB API error:", err.response?.data || err.message);
     res.status(500).json({ error: "Error fetching games from IGDB" });
   }
+
 });
 
 export default router;

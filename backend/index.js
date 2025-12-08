@@ -22,7 +22,9 @@ app.get("/", (req, res) => {
 //review routes
 app.use("/reviews", reviews);
 
+//game routes
+app.use("/games", games);
+
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log("Server running on port " + port));
 
-app.use("/games", games);
