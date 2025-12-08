@@ -10,6 +10,7 @@ export default function Home() {
     { id: 1, name: "Elden Ring" },
     { id: 2, name: "God of War" },
     { id: 3, name: "Fortnite" },
+    { id: 4, name: "Cyberpunk 2077" },
   ]);
 
   return (
