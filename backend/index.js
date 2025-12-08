@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import reviews from "./routes/reviews.js";
 import games from "./routes/games.js";
 
-app.use("/games", games);
+
 
 
 dotenv.config();
@@ -24,3 +24,5 @@ app.use("/reviews", reviews);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log("Server running on port " + port));
+
+app.use("/games", games);
