@@ -11,6 +11,19 @@ export const getReviews = async (req, res) => {
   }
 };
 
+
+export const getReviewsByUser = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const reviews = await getReviewsByUserId(userId);
+    res.json(reviews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error fetching reviews for user" });
+  }
+};
+
+
 export const postReview = async (req, res) => {
   const { gameId, username, content, rating, userId } = req.body;
   try {
@@ -25,17 +38,6 @@ export const postReview = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error posting review" });
-  }
-};
-
-export const getReviewsByUser = async (req, res) => {
-  const { userId } = req.params;
-  try {
-    const reviews = await getReviewsByUserId(userId);
-    res.json(reviews);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error fetching reviews for user" });
   }
 };
 
