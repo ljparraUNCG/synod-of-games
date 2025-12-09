@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import reviews from "./routes/reviews.js";
 import games from "./routes/games.js";
+import auth from "./routes/auth.js";
 
 
 
@@ -24,6 +25,9 @@ app.use("/reviews", reviews);
 
 //game routes
 app.use("/games", games);
+
+//auth routes
+app.use("/auth", auth);
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => console.log("Server running on port " + port));

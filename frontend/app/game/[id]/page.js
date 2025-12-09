@@ -30,6 +30,8 @@ export default function GamePage() {
     }
   };
 
+  
+
   //submit a new review
   const submitReview = async (e) => {
     e.preventDefault();
