@@ -1,4 +1,4 @@
-import { getReviewsByGameId, createReview } from "../models/reviewModel.js";
+import { getReviewsByGameId, createReview, getReviewsByUserId } from "../models/reviewModel.js";
 
 export const getReviews = async (req, res) => {
   const { gameId } = req.params;
@@ -27,3 +27,15 @@ export const postReview = async (req, res) => {
     res.status(500).json({ error: "Error posting review" });
   }
 };
+
+export const getReviewsByUser = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const reviews = await getReviewsByUserId(userId);
+    res.json(reviews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error fetching reviews for user" });
+  }
+};
+

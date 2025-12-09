@@ -8,26 +8,43 @@ const API = process.env.NEXT_PUBLIC_API_URL;
 
 export default function MyReviewsPage() {
   const { user } = useContext(UserContext);
+
   const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true); 
   const [editing, setEditing] = useState(null);
   const [editContent, setEditContent] = useState("");
   const [editRating, setEditRating] = useState(0);
 
-  useEffect(() => {
-    if (!user) return;
+    //load user's reviews
+  const loadReviews = async () => {
+    if (!user) return; 
 
-    async function load() {
+    try {
       const res = await axios.get(`${API}/reviews/user/${user.id}`);
       setReviews(res.data);
+    } catch (err) {
+      console.error("Failed loading reviews", err);
     }
 
-    load();
+    setLoading(false);
+  };
+
+  //delay load until user is logged in
+  useEffect(() => {
+    if (!user) return; 
+    loadReviews();
   }, [user]);
+
+
+//delete review
 
   const deleteReview = async (id) => {
     await axios.delete(`${API}/reviews/${id}`);
-    setReviews(reviews.filter((r) => r.id !== id));
+    setReviews((prev) => prev.filter((r) => r.id !== id));
   };
+
+  
+  //edit review
 
   const startEdit = (review) => {
     setEditing(review.id);
@@ -41,8 +58,8 @@ export default function MyReviewsPage() {
       rating: editRating,
     });
 
-    setReviews(
-      reviews.map((r) =>
+    setReviews((prev) =>
+      prev.map((r) =>
         r.id === id ? { ...r, content: editContent, rating: editRating } : r
       )
     );
@@ -50,7 +67,11 @@ export default function MyReviewsPage() {
     setEditing(null);
   };
 
-  if (!user) return <p>You must be logged in.</p>;
+
+  //render
+
+  if (!user) return <p>Loading user...</p>; 
+  if (loading) return <p>Loading reviews...</p>; 
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -82,7 +103,7 @@ export default function MyReviewsPage() {
                 value={editRating}
                 min="1"
                 max="10"
-                onChange={(e) => setEditRating(e.target.value)}
+                onChange={(e) => setEditRating(Number(e.target.value))}
               />
               <br />
               <button onClick={() => saveEdit(review.id)}>Save</button>

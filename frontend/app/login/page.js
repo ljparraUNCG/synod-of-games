@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,13 +13,16 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const { login: contextLogin } = useContext(UserContext);
 
   const login = async (e) => {
     e.preventDefault();
 
     try {
       const res = await axios.post(`${API}/auth/login`, { username, password });
-      localStorage.setItem("user", JSON.stringify(res.data));
+      
+      //update user login
+      contextLogin(res.data); 
       setMessage("Logged in successfully!");
 
       setTimeout(() => {
