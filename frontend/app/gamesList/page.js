@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,48 +13,45 @@ export default function GamesPage() {
   useEffect(() => {
     const fetchGames = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/games`); // your backend endpoint for all games
+        const res = await axios.get(`${API_BASE}/games`);
         setGames(res.data);
       } catch (err) {
         console.error("Failed to load games", err);
       }
       setLoading(false);
     };
-
     fetchGames();
   }, []);
 
-  if (loading) return <p>Loading games...</p>;
+  if (loading) return <p className="container">Loading games...</p>;
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>All Games</h1>
-      {games.length === 0 && <p>No games found.</p>}
-      <ul>
+    <div className="container">
+      <h1 style={{ marginBottom: 12 }}>All Games</h1>
+
+      {games.length === 0 && (
+        <div className="card small-muted">No games found.</div>
+      )}
+
+      <div className="game-grid" style={{ marginTop: 12 }}>
         {games.map((game) => (
-          <li key={game.id}>
-            {game.cover?.url && (
-              <div>
-                <img
-                  src={
-                    game.cover?.url
-                      ? "https:" +
-                        game.cover.url.replace("t_thumb", "t_cover_big")
-                      : "/no-image.png"
-                  }
-                  alt={game.name}
-                  style={{
-                    width: "150px",
-                    marginTop: "0.5rem",
-                    borderRadius: "8px",
-                  }}
-                />
-              </div>
-            )}
-            <strong>{game.name}</strong> - {game.description}
-          </li>
+          <Link key={game.id} href={`/game/${game.id}`}>
+            <div className="game-card">
+              <img
+                className="game-cover"
+                src={
+                  game.cover?.url
+                    ? "https:" +
+                      game.cover.url.replace("t_thumb", "t_cover_big")
+                    : "/no-image.png"
+                }
+                alt={game.name}
+              />
+              <h3 style={{ marginTop: 8 }}>{game.name}</h3>
+            </div>
+          </Link>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

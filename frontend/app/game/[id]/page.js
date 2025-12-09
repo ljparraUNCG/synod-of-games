@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
@@ -10,47 +8,51 @@ export default function GamePage() {
   const params = useParams();
   const gameId = params.id;
 
+  const [game, setGame] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [username, setUsername] = useState("");
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(0);
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
-
-  
-  
-  const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/reviews`;
-
-  //load reviews for this game
-  const loadReviews = async () => {
+  const loadGame = async () => {
     try {
-      const res = await axios.get(`${API_URL}/${gameId}`);
-      setReviews(res.data);
+      const res = await axios.get(`${API_BASE}/games/details/${gameId}`);
+      // IGDB returns an array of results for POST queries — take first
+      setGame(Array.isArray(res.data) ? res.data[0] : res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Error loading game:", err);
     }
   };
 
-  
+  const loadReviews = async () => {
+    try {
+      const res = await axios.get(`${API_BASE}/reviews/${gameId}`);
+      setReviews(res.data);
+    } catch (err) {
+      console.error("Error loading reviews:", err);
+    }
+  };
 
-  //submit a new review
+  useEffect(() => {
+    loadGame();
+    loadReviews();
+  }, [gameId]);
+
   const submitReview = async (e) => {
     e.preventDefault();
-
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (!storedUser) {
       alert("You must be logged in to post a review.");
       return;
     }
-
     try {
-      await axios.post(API_URL, {
+      await axios.post(`${API_BASE}/reviews`, {
         gameId: Number(gameId),
         username: storedUser.username,
         userId: storedUser.id,
         content,
         rating,
       });
-
       setContent("");
       setRating(0);
       loadReviews();
@@ -59,68 +61,70 @@ export default function GamePage() {
     }
   };
 
-
-  useEffect(() => {
-    loadReviews();
-  }, []);
-
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Reviews for Game {gameId}</h1>
+    <div className="container">
+      <h1>{game ? game.name : "Loading..."}</h1>
 
-      <form onSubmit={submitReview} style={{ marginBottom: "2rem" }}>
-        <input
-          type="text"
-          placeholder="Your Name"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-          style={{ display: "block", marginBottom: "0.5rem", width: "300px" }}
-        />
-        <textarea
-          placeholder="Your Review"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
+      {game?.cover?.url && (
+        <img
+          className="game-cover"
           style={{
-            display: "block",
-            marginBottom: "0.5rem",
-            width: "300px",
-            height: "100px",
+            width: 260,
+            height: 350,
+            objectFit: "cover",
+            borderRadius: 12,
           }}
+          src={"https:" + game.cover.url.replace("t_thumb", "t_cover_big")}
+          alt={game.name}
         />
-        <input
-          type="number"
-          placeholder="Rating (0-10)"
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
-          min={0}
-          max={10}
-          required
-          style={{ display: "block", marginBottom: "0.5rem", width: "300px" }}
-        />
-
-        <button type="submit">Submit Review</button>
-      </form>
-
-      <h2>All Reviews</h2>
-      {reviews.length === 0 ? (
-        <p>No reviews yet.</p>
-      ) : (
-        reviews.map((r) => (
-          <div
-            key={r.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "0.5rem",
-              marginBottom: "0.5rem",
-            }}
-          >
-            <strong>{r.username}</strong> - <em>Rating: {r.rating}/10</em>
-            <p>{r.content}</p>
-          </div>
-        ))
       )}
+
+      {game?.summary && (
+        <div className="card" style={{ marginTop: 12 }}>
+          {game.summary}
+        </div>
+      )}
+
+      <div style={{ marginTop: 18 }}>
+        <h2>Write a review</h2>
+        <form onSubmit={submitReview} className="card">
+          <textarea
+            className="input"
+            rows={4}
+            placeholder="What do you think?"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <input
+            className="input"
+            type="number"
+            min="0"
+            max="10"
+            value={rating}
+            onChange={(e) => setRating(Number(e.target.value))}
+          />
+          <button className="button" type="submit">
+            Post Review
+          </button>
+        </form>
+      </div>
+
+      <div style={{ marginTop: 18 }}>
+        <h2>Reviews</h2>
+        {reviews.length === 0 ? (
+          <p className="small-muted">No reviews yet.</p>
+        ) : (
+          reviews.map((r) => (
+            <div key={r.id} className="card">
+              <div className="space-between">
+                <strong>{r.username}</strong>
+                <span className="small-muted">{r.rating}/10</span>
+              </div>
+              <p style={{ marginTop: 8 }}>{r.content}</p>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }

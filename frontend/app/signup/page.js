@@ -13,11 +13,10 @@ export default function SignupPage() {
 
   const signup = async (e) => {
     e.preventDefault();
-
     try {
       await axios.post(`${API}/auth/signup`, { username, password });
       alert("Signup successful!");
-      router.push("/login"); // redirect to login
+      router.push("/login");
     } catch (err) {
       console.error(err);
       alert("Signup failed");
@@ -25,24 +24,25 @@ export default function SignupPage() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Signup</h1>
-      <form onSubmit={signup}>
+    <div className="container">
+      <h1>Create account</h1>
+      <form onSubmit={signup} className="card">
         <input
-          type="text"
-          placeholder="Username"
+          className="input"
+          placeholder="username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <br />
         <input
+          className="input"
           type="password"
-          placeholder="Password"
+          placeholder="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <br />
-        <button type="submit">Create Account</button>
+        <button className="button" type="submit">
+          Sign up
+        </button>
       </form>
     </div>
   );

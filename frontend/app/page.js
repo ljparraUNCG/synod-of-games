@@ -5,14 +5,13 @@ import Link from "next/link";
 import axios from "axios";
 
 export default function Home() {
-  const [query, setQuery] = useState(""); // user search input
-  const [games, setGames] = useState([]); // games from IGDB
-  const [loading, setLoading] = useState(false); // loading indicator
-  const [error, setError] = useState(""); // error messages
+  const [query, setQuery] = useState("");
+  const [games, setGames] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
-  // fetch games from backend
   const fetchGames = async () => {
     if (!query) return;
     setLoading(true);
@@ -30,50 +29,62 @@ export default function Home() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Synod of Games</h1>
+    <div className="container">
+      <h1 style={{ marginBottom: 8 }}>Synod of Games</h1>
+      <p className="small-muted" style={{ marginBottom: 16 }}>
+        Search games (IGDB) and read/write reviews.
+      </p>
 
-      <p>welcome to the synod of games website</p>
-
-      <h2>Search for a game to see reviews</h2>
-
-      {/* Search bar */}
-      <div style={{ marginBottom: "1rem" }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
         <input
-          type="text"
-          placeholder="Enter game name..."
+          className="input"
+          placeholder="Search game..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          style={{ padding: "0.5rem", width: "300px", marginRight: "0.5rem" }}
         />
-        <button onClick={fetchGames} style={{ padding: "0.5rem 1rem" }}>
-          Search
+        <button className="button" onClick={fetchGames} disabled={loading}>
+          {loading ? "Searching..." : "Search"}
         </button>
       </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <div className="card small-muted">{error}</div>}
 
-      {/* Game results */}
-      <ul>
-        {games.map((game) => (
-          <li key={game.id} style={{ marginBottom: "1rem" }}>
-            <Link href={`/game/${game.id}`}>
-              <strong>{game.name}</strong>
-            </Link>
-            {game.cover?.url && (
-              <div>
-                <img
-                  src={game.cover.url.replace("t_thumb", "t_cover_big")}
-                  alt={game.name}
-                  style={{ width: "150px", marginTop: "0.5rem" }}
-                />
-              </div>
-            )}
-            {game.summary && <p>{game.summary}</p>}
-          </li>
-        ))}
-      </ul>
+      <div style={{ marginTop: 16 }}>
+        {games.length === 0 && !loading ? (
+          <p className="small-muted">
+            No results yet — try searching for "Elden Ring".
+          </p>
+        ) : (
+          <div className="game-grid">
+            {games.map((g) => (
+              <Link key={g.id} href={`/game/${g.id}`}>
+                <div className="game-card">
+                  <img
+                    className="game-cover"
+                    src={
+                      g.cover?.url
+                        ? "https:" +
+                          g.cover.url.replace("t_thumb", "t_cover_big")
+                        : "/no-image.png"
+                    }
+                    alt={g.name}
+                  />
+                  <h3 style={{ marginTop: 8 }}>{g.name}</h3>
+                  <p
+                    className="small-muted"
+                    style={{ marginTop: 6, fontSize: 13 }}
+                  >
+                    {g.summary
+                      ? g.summary.slice(0, 120) +
+                        (g.summary.length > 120 ? "…" : "")
+                      : "No summary."}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

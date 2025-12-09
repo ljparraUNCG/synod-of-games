@@ -6,14 +6,12 @@ export const UserContext = createContext();
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const stored = localStorage.getItem("user");
-    if (stored) {
-      setUser(JSON.parse(stored));
-    }
-    setLoading(false); // <-- Don't render app until loaded
+    if (stored) setUser(JSON.parse(stored));
+    setLoading(false);
   }, []);
 
   const login = (userData) => {
@@ -26,7 +24,7 @@ export function UserProvider({ children }) {
     setUser(null);
   };
 
-  if (loading) return null; // Prevent rendering navbar too early
+  if (loading) return null;
 
   return (
     <UserContext.Provider value={{ user, login, logout }}>
