@@ -17,12 +17,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav style={{ padding: "1rem", background: "#f0f0f0" }}>
+    <nav style={{ padding: "1rem", background: "#000000ff", border: "1px solid #ffffffff" }}>
       <Link href="/">Home</Link> |{" "}
       <Link href="/login">Login</Link> |{" "}
       <Link href="/signup">Signup</Link> |{" "}
       <Link href="/profile">Profile</Link>
-      
+
       <span style={{ marginLeft: "20px" }}>
         {user ? (
           <>
