@@ -1,40 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function Navbar() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const stored = localStorage.getItem("user");
-    if (stored) setUser(JSON.parse(stored));
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem("user");
-    window.location.href = "/login";
-  };
+  const { user, logout } = useContext(UserContext);
 
   return (
-    <nav style={{ padding: "1rem", background: "#000000ff", border: "1px solid #ffffffff" }}>
+    <nav style={{ padding: "1rem", borderBottom: "1px solid #ccc" }}>
       <Link href="/">Home</Link> |{" "}
-      <Link href="/login">Login</Link> |{" "}
-      <Link href="/signup">Signup</Link> |{" "}
-      <Link href="/profile">Profile</Link>
-
-      <span style={{ marginLeft: "20px" }}>
-        {user ? (
-          <>
-            Logged in as: <b>{user.username}</b>
-            <button onClick={logout} style={{ marginLeft: "10px" }}>
-              Logout
-            </button>
-          </>
-        ) : (
-          "Not logged in"
-        )}
-      </span>
+      {!user && (
+        <>
+          <Link href="/login">Login</Link> | <Link href="/signup">Signup</Link>
+        </>
+      )}
+      {user && (
+        <>
+          <Link href="/profile">Profile</Link> |{" "}
+          <Link href="/my-reviews">My Reviews</Link> |{" "}
+          <button onClick={logout}>Logout</button>
+        </>
+      )}
     </nav>
   );
 }
