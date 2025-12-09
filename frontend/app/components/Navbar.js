@@ -10,6 +10,7 @@ export default function Navbar() {
   return (
     <nav style={{ padding: "1rem", borderBottom: "1px solid #ccc" }}>
       <Link href="/">Home</Link> |{" "}
+      <Link href="/gamesList">Games</Link> |{" "}
       {!user && (
         <>
           <Link href="/login">Login</Link> | <Link href="/signup">Signup</Link>

@@ -32,6 +32,9 @@ export default function Home() {
   return (
     <div style={{ padding: "2rem" }}>
       <h1>Synod of Games</h1>
+
+      <p>welcome to the synod of games website</p>
+
       <h2>Search for a game to see reviews</h2>
 
       {/* Search bar */}
