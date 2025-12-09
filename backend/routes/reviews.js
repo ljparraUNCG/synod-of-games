@@ -1,5 +1,5 @@
 import express from "express";
-import { getReviews, postReview, getReviewsByUser } from "../controllers/reviewController.js";
+import { getReviews, postReview, getReviewsByUser, updateReview, deleteReview } from "../controllers/reviewController.js";
 
 const router = express.Router();
 
@@ -11,5 +11,11 @@ router.get("/user/:userId", getReviewsByUser);
 
 //POST a new review
 router.post("/", postReview);
+
+//PUT update a review
+router.put("/:id", updateReview);
+
+//DELETE a review
+router.delete("/:id", deleteReview);
 
 export default router;

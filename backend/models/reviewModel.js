@@ -30,3 +30,15 @@ export const createReview = async (
   );
   return result.rows[0];
 };
+
+export const updateReviewById = async (id, content, rating) => {
+  const result = await pool.query(
+    `UPDATE reviews SET content=$1, rating=$2 WHERE id=$3 RETURNING *`,
+    [content, rating, id]
+  );
+  return result.rows[0];
+};
+
+export const deleteReviewById = async (id) => {
+  await pool.query(`DELETE FROM reviews WHERE id=$1`, [id]);
+};

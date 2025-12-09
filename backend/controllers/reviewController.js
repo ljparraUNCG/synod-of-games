@@ -1,4 +1,7 @@
-import { getReviewsByGameId, createReview, getReviewsByUserId } from "../models/reviewModel.js";
+import { getReviewsByGameId, createReview, getReviewsByUserId, 
+    updateReviewById, deleteReviewById,} from "../models/reviewModel.js";
+
+
 
 export const getReviews = async (req, res) => {
   const { gameId } = req.params;
@@ -41,3 +44,27 @@ export const postReview = async (req, res) => {
   }
 };
 
+export const updateReview = async (req, res) => {
+  const { id } = req.params;
+  const { content, rating } = req.body;
+
+  try {
+    const updated = await updateReviewById(id, content, rating);
+    res.json(updated);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error updating review" });
+  }
+};
+
+export const deleteReview = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await deleteReviewById(id);
+    res.json({ message: "Review deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error deleting review" });
+  }
+};
