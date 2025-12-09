@@ -36,14 +36,21 @@ export default function GamePage() {
   const submitReview = async (e) => {
     e.preventDefault();
 
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (!storedUser) {
+      alert("You must be logged in to post a review.");
+      return;
+    }
+
     try {
       await axios.post(API_URL, {
         gameId: Number(gameId),
-        username,
+        username: storedUser.username,
+        userId: storedUser.id,
         content,
         rating,
       });
-      setUsername("");
+
       setContent("");
       setRating(0);
       loadReviews();
@@ -51,6 +58,7 @@ export default function GamePage() {
       console.error(err);
     }
   };
+
 
   useEffect(() => {
     loadReviews();

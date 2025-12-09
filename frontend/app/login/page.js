@@ -18,13 +18,17 @@ export default function LoginPage() {
     try {
       const res = await axios.post(`${API}/auth/login`, { username, password });
       localStorage.setItem("user", JSON.stringify(res.data));
-      setMessage("Logged in!");
-      router.push("/"); // redirect to home after login
+      setMessage("Logged in successfully!");
+
+      setTimeout(() => {
+        router.push("/");
+      }, 1200);
     } catch (err) {
       console.error(err);
       setMessage("Login failed");
     }
   };
+
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -46,7 +50,19 @@ export default function LoginPage() {
         <br />
         <button type="submit">Login</button>
       </form>
-      <p>{message}</p>
+      {message && (
+        <div
+          style={{
+            background: "#d4edda",
+            color: "#155724",
+            padding: "10px",
+            marginTop: "10px",
+            borderRadius: "5px",
+          }}
+        >
+          {message}
+        </div>
+      )}
     </div>
   );
 }
