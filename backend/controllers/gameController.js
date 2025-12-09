@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getGamesFromDB } from "../models/gameModel.js";
 
 const IGDB_HEADERS = {
   "Client-ID": process.env.IGDB_CLIENT_ID,
@@ -40,10 +39,16 @@ export const getGameDetails = async (req, res) => {
 
 export const getAllGames = async (req, res) => {
   try {
-    const games = await getGamesFromDB();
-    res.json(games);
+    const response = await axios({
+      url: "https://api.igdb.com/v4/games",
+      method: "POST",
+      headers: IGDB_HEADERS,
+      data: `fields name,cover.url,summary; limit 50;`,
+    });
+
+    res.json(response.data);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Error fetching games" });
+    console.error(err.response?.data || err.message);
+    res.status(500).json({ error: "Error fetching games from IGDB" });
   }
 };
