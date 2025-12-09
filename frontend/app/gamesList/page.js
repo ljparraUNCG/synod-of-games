@@ -32,6 +32,24 @@ export default function GamesPage() {
       <ul>
         {games.map((game) => (
           <li key={game.id}>
+            {game.cover?.url && (
+              <div>
+                <img
+                  src={
+                    game.cover?.url
+                      ? "https:" +
+                        game.cover.url.replace("t_thumb", "t_cover_big")
+                      : "/no-image.png"
+                  }
+                  alt={game.name}
+                  style={{
+                    width: "150px",
+                    marginTop: "0.5rem",
+                    borderRadius: "8px",
+                  }}
+                />
+              </div>
+            )}
             <strong>{game.name}</strong> - {game.description}
           </li>
         ))}

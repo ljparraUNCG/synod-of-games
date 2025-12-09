@@ -43,7 +43,9 @@ export const getAllGames = async (req, res) => {
       url: "https://api.igdb.com/v4/games",
       method: "POST",
       headers: IGDB_HEADERS,
-      data: `fields name,cover.url,summary; limit 50;`,
+      data: `fields name,cover.url,summary;
+             sort popularity desc;
+             limit 50;`,
     });
 
     res.json(response.data);
