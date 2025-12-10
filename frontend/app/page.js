@@ -32,7 +32,17 @@ export default function Home() {
     <div className="container">
       <h1 style={{ marginBottom: 8 }}>Synod of Games</h1>
       <p className="small-muted" style={{ marginBottom: 16 }}>
-        Search games (IGDB) and read/write reviews.
+        Basic rules:
+        <ul>
+          <li>Rate games from 1 to 5 stars.</li>
+          <li>Write reviews to share your thoughts.</li>
+          <li>Edit or delete your reviews anytime.</li>
+          <li>Do not offend anyone or any group of people.</li>
+          <li>Do not post slurs or offensive content to this website.</li>
+          <li>The Synod of Games DOES NOT approve of any form of negative content 
+            that can possibly hurt someone or a group of people.</li>
+        </ul>
+        
       </p>
 
       <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
